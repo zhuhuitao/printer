@@ -150,6 +150,10 @@ object DataForSendToPrinter {
         return byteArrayOfInts(0x1D, 0x21, n)
     }
 
+    fun queryPrinterState():ByteArray{
+        return byteArrayOfInts(0x1B,0x76)
+    }
+
 
     fun printBothColumns(str1: String, str2: String): ByteArray {
         val byte1Length: Int = getByteLength(str1)

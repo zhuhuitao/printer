@@ -1,14 +1,16 @@
 package com.huitao.printerdemo
 
+import android.bluetooth.BluetoothDevice
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.IBinder
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import com.huitao.printer.printerface.DeviceFoundCallback
 import com.huitao.printer.printerface.IMyBinder
 import com.huitao.printer.printerface.ProcessData
 import com.huitao.printer.printerface.TaskCallback
@@ -18,6 +20,7 @@ import com.huitao.printer.utils.DataForSendToPrinter.printAddPaperWalking
 import com.huitao.printer.utils.DataForSendToPrinter.printAndFeedLine
 import com.huitao.printer.utils.DataForSendToPrinter.printBothColumns
 import com.huitao.printer.utils.DataForSendToPrinter.printThreeColumns
+import com.huitao.printer.utils.DataForSendToPrinter.queryPrinterState
 import com.huitao.printer.utils.DataForSendToPrinter.selectAliment
 import com.huitao.printer.utils.DataForSendToPrinter.selectFont
 import com.huitao.printer.utils.DataForSendToPrinter.selectFontSize
@@ -57,17 +60,29 @@ class MainActivity : AppCompatActivity() {
         bindService(intent, mServiceConnection, BIND_AUTO_CREATE)
     }
 
-    fun connect(view: View) {
-        val address = "DC:0D:30:37:95:DD"
-        mMyBinder?.connectBtPort(address, object : TaskCallback {
-            override fun onSucceed() {
-                Toast.makeText(this@MainActivity, "connected successful", Toast.LENGTH_SHORT).show()
+
+    fun clickViews(view: View) {
+        when (view.id) {
+            R.id.tv_start_scan -> {
+                mMyBinder?.onDiscovery(
+                    this,
+                    PrinterDev.PortType.Bluetooth,
+                    object : DeviceFoundCallback {
+                        override fun deviceFoundCallback(device: String) {
+                            Log.d(TAG, "deviceFoundCallback: $device")
+                        }
+                    })
+            }
+            R.id.tv_bond -> {
+                val list = mMyBinder?.getBtAvailableDevice()
+                Log.d(TAG, "clickViews: $list")
+                mMyBinder?.getBtAvailableDevice()
             }
 
-            override fun onFailed() {
-                Toast.makeText(this@MainActivity, "connected failed", Toast.LENGTH_SHORT).show()
+            R.id.tv_start_connect -> {
+
             }
-        })
+        }
     }
 
     fun test(view: View) {
@@ -190,4 +205,49 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+
+    fun writeData() {
+        val handler = Handler()
+        val run = Runnable {
+            mMyBinder?.writeSendData(object : TaskCallback {
+                override fun onSucceed() {
+                }
+
+                override fun onFailed() {
+                }
+
+            }, object : ProcessData {
+                override fun processDataBeforeSend(): MutableList<ByteArray> {
+                    return arrayListOf(queryPrinterState())
+                }
+            })
+
+            while (true) {
+                mMyBinder?.read(object : TaskCallback {
+                    override fun onSucceed() {
+                    }
+
+                    override fun onFailed() {
+                    }
+                })
+            }
+        }
+        viewModelStore.runCatching {
+            kotlin.runCatching {
+                handler.postDelayed(
+                    run, 3000
+                )
+            }.onSuccess {
+                Log.d(TAG, "writeData:成功 ")
+                handler.postDelayed(run, 1000)
+            }.onFailure {
+                Log.d(TAG, "writeData: 失败")
+            }
+
+        }
+
+    }
+
+
 }

@@ -101,6 +101,22 @@ class PrinterDev(portType: PortType, bluetoothId: String) {
         return this.mPortInfo
     }
 
+    fun read(buffer: ByteArray): ReturnMessage {
+        return this.read(buffer, 0, buffer.size)
+    }
+
+    fun read(buffer: ByteArray, offset: Int, count: Int): ReturnMessage {
+        val returnMessage: ReturnMessage? = mPrinterPort?.read(buffer, offset, count)
+        return returnMessage!!
+    }
+
+    fun read(): Int {
+        val byte = ByteArray(1)
+        return if (this.read(byte, 0, 1)
+                .getErrorCode() == ErrorCode.ReadDataSucceed
+        ) byte[0].toInt() else -1
+    }
+
     private inner class BluetoothPort(portInfo: PortInfo) : PrinterPort(portInfo) {
         private val SPP_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
         private var mBluetoothAdapter: BluetoothAdapter? = null

@@ -1,3 +1,5 @@
+includeBuild("versionPlugin")
+include ':AppUpdate'
 include ':Printer'
 include ':app'
 rootProject.name = "PrinterDemo"

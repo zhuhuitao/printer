@@ -4,6 +4,17 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/versionPlugin" name="versionPlugin">
+                <projects>
+                  <project path="$PROJECT_DIR$/versionPlugin" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
         <option name="testRunner" value="PLATFORM" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -11,8 +22,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/AppUpdate" />
             <option value="$PROJECT_DIR$/Printer" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/versionPlugin" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

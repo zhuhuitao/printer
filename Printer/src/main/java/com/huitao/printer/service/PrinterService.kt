@@ -9,7 +9,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Binder
 import android.os.IBinder
+import android.os.Looper
+import android.util.Log
 import android.widget.Toast
+import com.huitao.printer.printerface.DeviceFoundCallback
 import com.huitao.printer.printerface.IMyBinder
 import com.huitao.printer.printerface.ProcessData
 import com.huitao.printer.printerface.TaskCallback
@@ -19,6 +22,7 @@ import com.huitao.printer.utils.RoundQueue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 /**
  *author  : huitao
@@ -33,7 +37,7 @@ class PrinterService : Service() {
     private lateinit var mReturnMsg: ReturnMessage
     private var mIsConnected = false
     private var mQueue: RoundQueue<ByteArray>? = null
-
+    private var mDeviceFoundCallback: DeviceFoundCallback? = null
     private fun getInstanceRoundQueue(): RoundQueue<ByteArray> {
         if (this.mQueue == null) {
             mQueue = RoundQueue(500)
@@ -60,12 +64,21 @@ class PrinterService : Service() {
         private var mPortType: PrinterDev.PortType? = null
         private val mReceiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
-                val action = p1?.action
-                if (action == "android.bluetooth.device.action.FOUND") {
+                if (p1?.action == "android.bluetooth.device.action.FOUND") {
+
                     val device =
                         p1.getParcelableExtra<BluetoothDevice>("android.bluetooth.device.extra.DEVICE")
                             ?: return
-                    mFond?.add("${device.name} \n ${device.address}")
+                    if (!device.name.isNullOrEmpty()) {
+                        mFond?.forEach {
+                            if (it.split("\n").last() == device.address) {
+                                return
+                            }
+                        }
+                        mFond?.add("${device.name}\n${device.address}")
+                        mDeviceFoundCallback?.deviceFoundCallback("${device.name} \n ${device.address}")
+
+                    }
                 }
             }
         }
@@ -117,10 +130,15 @@ class PrinterService : Service() {
             }.start()
         }
 
-        override fun onDiscovery(var1: Context): MutableList<String>? {
+        override fun onDiscovery(
+            var1: Context,
+            portType: PrinterDev.PortType,
+            callback: DeviceFoundCallback
+        ): MutableList<String>? {
             this.mFond = mutableListOf()
             this.mBond = mutableListOf()
-            if (mPortType == PrinterDev.PortType.Bluetooth) {
+            mDeviceFoundCallback = callback
+            if (portType == PrinterDev.PortType.Bluetooth) {
                 this.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
                 if (mBluetoothAdapter == null) {
                     Toast.makeText(
@@ -137,20 +155,24 @@ class PrinterService : Service() {
                         }
                         val filter = IntentFilter("android.bluetooth.device.action.FOUND")
                         registerReceiver(mReceiver, filter)
-                        val pairedDevice = mBluetoothAdapter!!.bondedDevices
-                        if (pairedDevice.isNullOrEmpty()) {
-                            val it = pairedDevice?.iterator()
-                            while (it!!.hasNext()) {
-                                val device = it.next()
-                                this.mFond?.add("${device.name} \n ${device.address}")
+                        mViewModelScope.launch(Dispatchers.IO) {
+                            val pairedDevice = mBluetoothAdapter!!.bondedDevices
+                            if (!pairedDevice.isNullOrEmpty()) {
+                                val it = pairedDevice.iterator()
+                                while (it.hasNext()) {
+                                    val device = it.next()
+                                    mBond?.add("${device.name} \n ${device.address}")
+                                }
+                            } else {
+                                Looper.prepare()
+                                Toast.makeText(
+                                    this@PrinterService,
+                                    "no paired device",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Looper.loop()
                             }
-                        } else {
-                            Toast.makeText(
-                                this@PrinterService,
-                                "no paired device",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        }.start()
                     } else {
                         Toast.makeText(
                             this@PrinterService,
@@ -166,12 +188,7 @@ class PrinterService : Service() {
                     ).show()
                 }
 
-
-                if (this.mBond != null && this.mFond != null) {
-                    this.mBond?.addAll(this.mFond!!)
-                }
             }
-
             return this.mFond
         }
 
@@ -220,6 +237,33 @@ class PrinterService : Service() {
                         }
                     }
                 }.start()
+            }
+        }
+
+        override fun acceptDataFromPrinter(var1: TaskCallback?, var2: Int) {
+            val buffer = ByteArray(var2)
+            mViewModelScope.launch {
+                kotlin.runCatching {
+                    mQueue = getInstanceRoundQueue()
+                    mQueue?.clear()
+                    mQueue?.addLast(buffer)
+                    Log.i("frank", "acceptDataFromPrinter: " + Arrays.toString(mQueue!!.last))
+                }.onSuccess {
+
+                }.onFailure {
+
+                }
+            }
+        }
+
+        override fun readBuffer(): RoundQueue<ByteArray?>? {
+            return null
+        }
+
+        override fun read(var1: TaskCallback) {
+            mViewModelScope.launch {
+                val msg = mPrinterDev.read()
+                Log.d("frank", "read: $msg")
             }
         }
 

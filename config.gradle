@@ -1,0 +1,116 @@
+ext {
+
+    android = [
+            compileSdkVersion   : 29,
+            buildToolsVersion   : "30.0.2",
+            applicationId       : "com.xionggouba.bearseller",
+            minSdkVersion       : 19,
+            targetSdkVersion    : 30,
+            versionCode         : 25,
+            versionName         : "3.8.23",
+            defaultPublishConfig: 'release',
+            publishNonDefault   : true,
+            mapKey              : 'c7e1ee468aa1bf8a6411114c50b91739',
+            pushKey             : '65aae199a0059fee8eb1dbe7',
+            pushChannel         : 'developer-default',
+    ]
+
+    appid = [
+            app           : "com.xionggouba.bearseller",
+            login         : "com.huitao.login",
+            home          : "com.huitao.home",
+            webview       : "com.huitao.webview",
+            main          : "com.huitao.main",
+            productManager: "com.huitao.productmanager",
+            personal      : "com.huitao.personalcenter",
+            map           : "com.huitao.map",
+            bluetooth     : "com.huitao.bluetooth",
+            push          : "com.huitao.push",
+            markketing    : "con.huitao.marketing",
+            printer       : "com.huitao.printer"
+    ]
+
+    versions = [
+            "lifecycle_version": "2.2.0",
+            "arch_version"     : "2.1.0",
+            "retrofit_version" : "2.6.2",
+            "dialog_version"   : "3.3.0",
+            "glide_version"    : "4.9.0",
+            "hilt"             : "2.28-alpha",
+            "kotlin_version"   : "1.4.10",
+            "fragment_version" : "1.2.5",
+            "room_version"     : "2.2.6"
+    ]
+
+
+    ui = [
+            "kotlin-stdlib"   : "org.jetbrains.kotlin:kotlin-stdlib:${versions['kotlin_version']}",
+            "core-ktx"        : "androidx.core:core-ktx:1.3.2",
+            "appcompat"       : "androidx.appcompat:appcompat:1.2.0",
+            "material"        : "com.google.android.material:material:1.2.1",
+            "constraintlayout": "androidx.constraintlayout:constraintlayout:2.0.4",
+//            "fragment"        : "androidx.fragment:fragment:${versions['fragment_version']}",
+//            "fragment-ktx"    : "androidx.fragment:fragment-ktx:${versions['fragment_version']}"
+    ]
+
+    dependenciestest = [
+            " junit4"      : "junit:junit:4.+",
+            "junit"        : "androidx.test.ext:junit:1.1.2",
+            "espresso-core": "androidx.test.espresso:espresso-core:3.3.0"
+    ]
+
+    dependencies = [
+            "autoService": "com.google.auto.service:auto-service:1.0-rc7"
+    ]
+
+    architecture = [
+            "viewmodel"          : "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions['lifecycle_version']}",
+            "livedata"           : "androidx.lifecycle:lifecycle-livedata-ktx:${versions['lifecycle_version']}",
+            "lifecycleruntime"   : "androidx.lifecycle:lifecycle-runtime-ktx:${versions['lifecycle_version']}",
+            "savedstate"         : "androidx.lifecycle:lifecycle-viewmodel-savedstate:${versions['lifecycle_version']}",
+            // alternately - if using Java8, use the following instead of lifecycle-compiler
+            "lifecyclecommon"    : "androidx.lifecycle:lifecycle-common-java8:${versions['lifecycle_version']}",
+            // Saved state module for ViewModel
+            "viewmodelsavedstate": "androidx.lifecycle:lifecycle-viewmodel-savedstate:${versions['lifecycle_version']}",
+            "lifecycleextentions": "androidx.lifecycle:lifecycle-extensions:${versions['lifecycle_version']}",
+            "retrofit2"          : "com.squareup.retrofit2:retrofit:${versions['retrofit_version']}",
+            "gson"               : "com.squareup.retrofit2:converter-gson:${versions['retrofit_version']}",
+            "persistentcookiejar": "com.github.franmontiel:PersistentCookieJar:v1.0.1",
+            "glide"              : "com.github.bumptech.glide:glide:${versions['glide_version']}",
+            "glidecompiler"      : "com.github.bumptech.glide:compiler:${versions['glide_version']}",
+            "oss"                : "com.aliyun.dpa:oss-android-sdk:2.9.1",
+            "luban"              : "top.zibin:Luban:1.1.8"
+    ]
+
+
+    common = [
+            "mmkv"                         : "com.tencent:mmkv:1.0.22",
+            "loadsir"                      : "com.kingja.loadsir:loadsir:1.3.6",
+            "dialogslifecycle"             : "com.afollestad.material-dialogs:lifecycle:${versions['dialog_version']}",
+            "dialogscore"                  : "com.afollestad.material-dialogs:core:${versions['dialog_version']}",
+            "dialogscolor"                 : "com.afollestad.material-dialogs:color:${versions['dialog_version']}",
+            "dialogsdatetime"              : "com.afollestad.material-dialogs:datetime:${versions['dialog_version']}",
+            "dialogsbottomsheets"          : "com.afollestad.material-dialogs:bottomsheets:${versions['dialog_version']}",
+            "photoselect"                  : "com.yuyh.imgsel:library:2.1.0",
+            "bannerViewPager"              : "com.github.zhpanvip:BannerViewPager:2.6.6",
+            "magicIndicator"               : "com.github.hackware1993:MagicIndicator:1.6.0",
+            "recyclerview"                 : "com.yanzhenjie.recyclerview:x:1.3.2",
+            "baseRecyclerViewAdapterHelper": "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4",
+            "refreshLayout"                : "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0",
+            "swithView"                    : "ch.ielse:switchbutton:1.0.0",
+            "rxpermission"                 : "com.github.tbruyelle:rxpermissions:0.10.2",
+            "picview"                      : "com.contrarywind:Android-PickerView:4.1.9",
+            "ratingbar"                    : "com.github.giswangsj:AndRatingBar:1.0.4",
+            "arscan"                       : "cn.bingoogolapple:bga-qrcode-zbar:1.3.7",
+            "jpush"                        : "cn.jiguang.sdk:jpush:3.8.6",
+            "jcore"                        : "cn.jiguang.sdk:jcore:2.6.0",
+            "3dmap"                        : "com.amap.api:3dmap:7.8.0",
+            "location"                     : "com.amap.api:location:latest.integration",
+            "search"                       : "com.amap.api:search:latest.integration",
+            "wechat"                       : "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+",
+            "bugly"                        : "com.tencent.bugly:crashreport:latest.release",
+            "printer"                      : "com.github.zhuhuitao:printer:1.0.3"
+    ]
+
+
+}
