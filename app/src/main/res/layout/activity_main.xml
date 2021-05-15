@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="10dp"
-        android:gravity="center"
         android:background="@android:color/holo_green_dark"
+        android:gravity="center"
         android:onClick="clickViews"
         android:text="开始扫描" />
 
@@ -21,9 +21,10 @@
         android:id="@+id/tv_bond"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/holo_green_dark"
         android:gravity="center"
         android:onClick="clickViews"
-        android:background="@android:color/holo_green_dark"
         android:text="获取绑定的设备" />
 
     <TextView
@@ -31,11 +32,20 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="10dp"
-        android:gravity="center"
         android:background="@android:color/holo_green_dark"
+        android:gravity="center"
         android:onClick="clickViews"
         android:text="开始连接" />
 
+    <TextView
+        android:id="@+id/tv_bond_devices"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/holo_green_dark"
+        android:gravity="center"
+        android:onClick="clickViews"
+        android:text="获取绑定的设备" />
 
 
 </LinearLayout>

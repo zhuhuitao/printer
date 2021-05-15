@@ -155,24 +155,22 @@ class PrinterService : Service() {
                         }
                         val filter = IntentFilter("android.bluetooth.device.action.FOUND")
                         registerReceiver(mReceiver, filter)
-                        mViewModelScope.launch(Dispatchers.IO) {
-                            val pairedDevice = mBluetoothAdapter!!.bondedDevices
-                            if (!pairedDevice.isNullOrEmpty()) {
-                                val it = pairedDevice.iterator()
-                                while (it.hasNext()) {
-                                    val device = it.next()
-                                    mBond?.add("${device.name} \n ${device.address}")
-                                }
-                            } else {
-                                Looper.prepare()
-                                Toast.makeText(
-                                    this@PrinterService,
-                                    "no paired device",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Looper.loop()
+                        val pairedDevice = mBluetoothAdapter!!.bondedDevices
+                        if (!pairedDevice.isNullOrEmpty()) {
+                            val it = pairedDevice.iterator()
+                            while (it.hasNext()) {
+                                val device = it.next()
+                                mBond?.add("${device.name} \n ${device.address}")
                             }
-                        }.start()
+                        } else {
+                            Looper.prepare()
+                            Toast.makeText(
+                                this@PrinterService,
+                                "no paired device",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Looper.loop()
+                        }
                     } else {
                         Toast.makeText(
                             this@PrinterService,
@@ -189,7 +187,7 @@ class PrinterService : Service() {
                 }
 
             }
-            return this.mFond
+            return this.mBond
         }
 
         override fun getBtAvailableDevice(): MutableList<String> {

@@ -58,7 +58,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val intent = Intent(this, PrinterService::class.java)
         bindService(intent, mServiceConnection, BIND_AUTO_CREATE)
+        
     }
+    
 
 
     fun clickViews(view: View) {
@@ -81,6 +83,18 @@ class MainActivity : AppCompatActivity() {
 
             R.id.tv_start_connect -> {
 
+            }
+
+            R.id.tv_bond_devices -> {
+                val list = mMyBinder?.onDiscovery(
+                    this,
+                    PrinterDev.PortType.Bluetooth,
+                    object : DeviceFoundCallback {
+                        override fun deviceFoundCallback(device: String) {
+                        }
+                    })
+
+                Log.d(TAG, "clickViews: $list")
             }
         }
     }
