@@ -150,8 +150,8 @@ object DataForSendToPrinter {
         return byteArrayOfInts(0x1D, 0x21, n)
     }
 
-    fun queryPrinterState():ByteArray{
-        return byteArrayOfInts(0x1B,0x76)
+    fun queryPrinterState(): ByteArray {
+        return byteArrayOfInts(0x1B, 0x76)
     }
 
 
@@ -181,6 +181,7 @@ object DataForSendToPrinter {
         for (i in 0 until rightSpaceLength) {
             sb.append(" ")
         }
+        sb.delete(sb.length - 1, sb.length)
         sb.append(str3)
         return strToBytes(sb.toString())!!
     }
