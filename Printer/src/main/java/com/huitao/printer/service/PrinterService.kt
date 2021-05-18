@@ -105,16 +105,18 @@ class PrinterService : Service() {
         override fun disconnectCurrentPort(var1: TaskCallback) {
             mViewModelScope.launch {
                 mReturnMsg = mPrinterDev.close()
-                when (mReturnMsg.getErrorCode()) {
-                    PrinterDev.ErrorCode.ClosePortSucceed -> {
-                        mIsConnected = false
-                        if (mQueue != null) {
-                            mQueue?.clear()
+                mViewModelScope.launch(Dispatchers.Main) {
+                    when (mReturnMsg.getErrorCode()) {
+                        PrinterDev.ErrorCode.ClosePortSucceed -> {
+                            mIsConnected = false
+                            if (mQueue != null) {
+                                mQueue?.clear()
+                            }
+                            var1.onSucceed()
                         }
-                        var1.onSucceed()
-                    }
-                    else -> {
-                        var1.onFailed()
+                        else -> {
+                            var1.onFailed()
+                        }
                     }
                 }
             }.start()
@@ -160,7 +162,7 @@ class PrinterService : Service() {
                             val it = pairedDevice.iterator()
                             while (it.hasNext()) {
                                 val device = it.next()
-                                mBond?.add("${device.name} \n ${device.address}")
+                                mBond?.add("${device.name}\n${device.address}")
                             }
                         } else {
                             Looper.prepare()
