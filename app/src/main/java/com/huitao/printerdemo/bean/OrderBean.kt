@@ -35,7 +35,7 @@ fun getOrderData(): OrderBean {
     return OrderBean(
         shopName = "一点点奶茶",
         shopAddress = "广东省深圳市深圳北站二楼一点点奶茶店",
-        createTime = "2021-05-12 10:21:33",
+        createTime = "10:21:33",
         orderCode = "SP1258444BAD45",
         shopMobile = "0755-5335267",
         receiver = "张小蛋",
@@ -43,7 +43,7 @@ fun getOrderData(): OrderBean {
         address = "广东省深圳市南山区科技园中芯国际大厦2021",
         pickUpCode = "25",
         deliveryTypeStr = "骑手专送",
-        receiveTime = "2021-05-12 11:22:46",
+        receiveTime = "11:22:46",
         remarks = "多放点辣椒，帮我放到前台，谢谢",
         riderName = "光头强",
         riderMobile = "19926587561",
