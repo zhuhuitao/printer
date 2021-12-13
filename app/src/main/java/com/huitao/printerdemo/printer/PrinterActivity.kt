@@ -18,7 +18,6 @@ import com.huitao.printerdemo.databinding.ActivityPrinterBinding
 import com.huitao.printerdemo.printerface.AdapterClickListener
 import com.huitao.printerdemo.service.MyService
 import com.huitao.utils.SpaceItemDecoration
-import kotlin.time.days
 
 /**
  *author  : huitao
