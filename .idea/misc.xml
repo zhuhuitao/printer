@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Android/Project/PrinterDemo/app/src/main/res/layout/activity_main.xml" value="0.171225937183384" />
+        <entry key="..\:/Android/Project/PrinterDemo/app/src/main/res/layout/activity_printer.xml" value="0.171225937183384" />
+        <entry key="..\:/Android/Project/PrinterDemo/app/src/main/res/layout/adapter_bond_list.xml" value="0.171225937183384" />
+      </map>
+    </option>
+  </component>
   <component name="FindBugsConfigurable">
     <option name="make" value="true" />
     <option name="effort" value="default" />

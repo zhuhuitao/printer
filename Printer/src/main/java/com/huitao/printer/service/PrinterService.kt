@@ -64,20 +64,20 @@ class PrinterService : Service() {
         private var mPortType: PrinterDev.PortType? = null
         private val mReceiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
-                if (p1?.action == "android.bluetooth.device.action.FOUND") {
-
-                    val device =
-                        p1.getParcelableExtra<BluetoothDevice>("android.bluetooth.device.extra.DEVICE")
-                            ?: return
-                    if (!device.name.isNullOrEmpty()) {
-                        mFond?.forEach {
-                            if (it.split("\n").last() == device.address) {
-                                return
+                p1?.let {
+                    if (it.action == "android.bluetooth.device.action.FOUND") {
+                        val device =
+                            it.getParcelableExtra<BluetoothDevice>("android.bluetooth.device.extra.DEVICE")
+                                ?: return
+                        if (!device.name.isNullOrEmpty()) {
+                            mFond?.forEach { found ->
+                                if (found.split("\n").last() == device.address) {
+                                    return
+                                }
                             }
+                            mFond?.add("${device.name}\n${device.address}")
+                            mDeviceFoundCallback?.deviceFoundCallback("${device.name} \n ${device.address}")
                         }
-                        mFond?.add("${device.name}\n${device.address}")
-                        mDeviceFoundCallback?.deviceFoundCallback("${device.name} \n ${device.address}")
-
                     }
                 }
             }
@@ -86,7 +86,7 @@ class PrinterService : Service() {
         override fun connectBtPort(var1: String, var2: TaskCallback) {
             mViewModelScope.launch {
                 mPrinterDev = PrinterDev(PrinterDev.PortType.Bluetooth, var1)
-                mReturnMsg = this@PrinterService.mPrinterDev.open()
+                mReturnMsg = mPrinterDev.open()
                 mPortType = PrinterDev.PortType.Bluetooth
                 mViewModelScope.launch(Dispatchers.Main) {
                     when (mReturnMsg.getErrorCode()) {
