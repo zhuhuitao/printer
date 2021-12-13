@@ -5,10 +5,8 @@ import android.content.*
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.huitao.printer.printerface.DeviceFoundCallback
 import com.huitao.printer.printerface.IMyBinder
-import com.huitao.printer.printerface.ProcessData
 import com.huitao.printer.printerface.TaskCallback
 import com.huitao.printer.service.PrinterService
 import com.huitao.printer.utils.PrinterDev
@@ -24,8 +22,6 @@ import com.huitao.utils.printOrderDetail
  */
 class MyService : Service() {
     private var mIMyBinder: IMyBinder? = null
-    private var mIsConnected = false
-    private lateinit var mLocalBroadcastManager: LocalBroadcastManager
     private val mServiceConnect = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             mIMyBinder = service as IMyBinder
@@ -51,6 +47,7 @@ class MyService : Service() {
             PrinterDev.PortType.Bluetooth,
             object : DeviceFoundCallback {
                 override fun deviceFoundCallback(device: String) {
+                    //这里接收扫描的周围蓝牙设备
                 }
             })
     }
@@ -72,7 +69,6 @@ class MyService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this)
         val intent = Intent(this, AncillaryService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             AncillaryService.startForeground(this)
