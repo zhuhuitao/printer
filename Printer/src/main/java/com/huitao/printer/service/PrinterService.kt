@@ -95,7 +95,7 @@ class PrinterService : Service() {
                             var2.onSucceed()
                         }
                         else -> {
-                            var2.onFailed()
+                            var2.onFailed("Bluetooth connected Failed")
                         }
                     }
                 }
@@ -115,7 +115,7 @@ class PrinterService : Service() {
                             var1.onSucceed()
                         }
                         else -> {
-                            var1.onFailed()
+                            var1.onFailed("Bluetooth disconnected failed")
                         }
                     }
                 }
@@ -128,7 +128,7 @@ class PrinterService : Service() {
 
         override fun checkLinkedState(var1: TaskCallback) {
             mViewModelScope.launch {
-                if (mPrinterDev.getPortInfo().isOpened) var1.onSucceed() else var1.onFailed()
+                if (mPrinterDev.getPortInfo().isOpened) var1.onSucceed() else var1.onFailed("")
             }.start()
         }
 
@@ -209,7 +209,7 @@ class PrinterService : Service() {
                             }
                             else -> {
                                 mIsConnected = false
-                                var2.onFailed()
+                                var2.onFailed("Write data failed ,please check the device connected")
                             }
                         }
                     }
@@ -220,7 +220,7 @@ class PrinterService : Service() {
         override fun writeSendData(var1: TaskCallback, var2: ProcessData) {
             val list = var2.processDataBeforeSend()
             if (list == null) {
-                var1.onFailed()
+                var1.onFailed("Write data is null")
             } else {
                 mViewModelScope.launch {
                     list.forEach {
@@ -233,7 +233,7 @@ class PrinterService : Service() {
                         }
                         else -> {
                             mIsConnected = false
-                            var1.onFailed()
+                            var1.onFailed("Bluetooth is no connected,please connect first")
                         }
                     }
                 }.start()

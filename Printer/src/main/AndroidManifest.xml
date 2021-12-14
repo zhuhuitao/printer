@@ -4,4 +4,11 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <application>
+        <provider
+            android:name=".PrinterProvider"
+            android:authorities="${applicationId}.printer-tool"
+            android:exported="false" />
+    </application>
 </manifest>

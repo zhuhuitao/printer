@@ -10,5 +10,5 @@ package com.huitao.printer.printerface
 interface TaskCallback {
     fun onSucceed()
 
-    fun onFailed()
+    fun onFailed(error:String)
 }

@@ -31,7 +31,7 @@ class MyService : Service() {
 
                 }
 
-                override fun onFailed() {
+                override fun onFailed(error: String) {
 
                 }
             })
